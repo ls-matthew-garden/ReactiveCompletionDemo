@@ -39,49 +39,6 @@ extension Data {
     }
 }
 
-// Helpers for demonstrating chaining reactive events
-var delay: Int = 3
-let completeAfterDelay: () -> Completable = {
-    return Completable.create(subscribe: { observer in
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(delay)) {
-            observer(.completed)
-        }
-        return Disposables.create()
-    })
-}
-let stringAfterDelay: (String) -> Single<String> = { value in
-    return Single<String>.create(subscribe: { observer in
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(delay)) {
-            observer(.success(value))
-        }
-        return Disposables.create()
-    })
-}
-let maybeAfterDelay: (String) -> Maybe<String> = { value in
-    return Maybe<String>.create(subscribe: { observer in
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(delay)) {
-            observer(.success("Long ago in a galaxy far far away... \(value)"))
-        }
-        return Disposables.create()
-    })
-}
-let emptyAfterDelay: (String) -> Maybe<String> = { value in
-    return Maybe<String>.create(subscribe: { observer in
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(delay)) {
-            observer(.completed)
-        }
-        return Disposables.create()
-    })
-}
-let errorAfterDelay: () -> Maybe<String> = {
-    return Maybe.create(subscribe: { observer in
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(delay)) {
-            observer(.error(NSError(domain: "Reactive completions", code: 0, userInfo: nil)))
-        }
-        return Disposables.create()
-    })
-}
-
 // Type that can fetch from swapi.dev and communicate the result using RxSwift
 struct RxSwapiSession {
     
@@ -166,6 +123,49 @@ struct RxSwapiSession {
             }
         })
     }
+}
+
+// Helpers for demonstrating chaining reactive events
+var delay: Int = 3
+let completeAfterDelay: () -> Completable = {
+    return Completable.create(subscribe: { observer in
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(delay)) {
+            observer(.completed)
+        }
+        return Disposables.create()
+    })
+}
+let stringAfterDelay: (String) -> Single<String> = { value in
+    return Single<String>.create(subscribe: { observer in
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(delay)) {
+            observer(.success(value))
+        }
+        return Disposables.create()
+    })
+}
+let maybeAfterDelay: (String) -> Maybe<String> = { value in
+    return Maybe<String>.create(subscribe: { observer in
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(delay)) {
+            observer(.success("Long ago in a galaxy far far away... \(value)"))
+        }
+        return Disposables.create()
+    })
+}
+let emptyAfterDelay: (String) -> Maybe<String> = { value in
+    return Maybe<String>.create(subscribe: { observer in
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(delay)) {
+            observer(.completed)
+        }
+        return Disposables.create()
+    })
+}
+let errorAfterDelay: () -> Maybe<String> = {
+    return Maybe.create(subscribe: { observer in
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(delay)) {
+            observer(.error(NSError(domain: "Reactive completions", code: 0, userInfo: nil)))
+        }
+        return Disposables.create()
+    })
 }
 
 let rxSession = RxSwapiSession(session: session)
